@@ -1,7 +1,17 @@
 import ship from "./ship";
 
 export default () => {
-  const board = [[], [], [], [], [], [], [], [], [], []];
+  const board = [];
+
+  for (let col = 0; col < 10; col += 1) {
+    board[col] = [];
+    for (let row = 0; row < 10; row += 1) {
+      board[col][row] = {
+        ship: undefined,
+        missed: false,
+      };
+    }
+  }
 
   const getBoard = () => board;
 
@@ -16,15 +26,24 @@ export default () => {
       const spanCol = horizontal ? i : 0;
       const spanRow = horizontal ? 0 : i;
 
-      if (board[col + spanCol][row + spanRow] !== undefined) {
+      if (board[col + spanCol][row + spanRow].ship !== undefined) {
         return false;
       }
 
-      board[col + spanCol][row + spanRow] = newShip;
+      board[col + spanCol][row + spanRow].ship = newShip;
     }
 
     return newShip;
   };
 
-  return { getBoard, placeShip };
+  const receiveAttack = (col, row) => {
+    const attackedShip = board[col][row].ship;
+    if (attackedShip) {
+      attackedShip.hit();
+    } else {
+      board[col][row].missed = true;
+    }
+  };
+
+  return { getBoard, placeShip, receiveAttack };
 };

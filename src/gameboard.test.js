@@ -1,52 +1,68 @@
-import ship from "./ship";
 import gameboard from "./gameboard";
 
-jest.mock("./ship", () => jest.fn(() => "Mock Ship"));
-
-test("Place ship calls ship factory with length", () => {
-  const testGameboard = gameboard();
-  testGameboard.placeShip(1, 1, 3);
-  expect(ship).toHaveBeenCalledWith(3);
+let testGameboard;
+beforeEach(() => {
+  testGameboard = gameboard();
 });
 
-test("Place ship creates ship at x, y and returns it", () => {
-  const testGameboard = gameboard();
-  const testShip = testGameboard.placeShip(1, 1, 3);
-  expect(testGameboard.getBoard()[1][1]).toBe(testShip);
+describe("Place ship", () => {
+  test("creates ship at x, y and returns it", () => {
+    const testShip = testGameboard.placeShip(1, 1, 3);
+    expect(testGameboard.getBoard()[1][1].ship).toBe(testShip);
+  });
+
+  test("creates ship at x, y and spans across length coordinates", () => {
+    const testShip = testGameboard.placeShip(1, 1, 3);
+    expect(testGameboard.getBoard()[1][1].ship).toBe(testShip);
+    expect(testGameboard.getBoard()[1][2].ship).toBe(testShip);
+    expect(testGameboard.getBoard()[1][3].ship).toBe(testShip);
+  });
+
+  test("with horizontal = true creates ship at x, y and spans across length coordinates horizontally", () => {
+    const testShip = testGameboard.placeShip(1, 1, 3, true);
+    expect(testGameboard.getBoard()[1][1].ship).toBe(testShip);
+    expect(testGameboard.getBoard()[2][1].ship).toBe(testShip);
+    expect(testGameboard.getBoard()[3][1].ship).toBe(testShip);
+  });
+
+  test("checks and returns false if ship is already placed at coordinates", () => {
+    testGameboard.placeShip(1, 1, 1);
+    const testShipFailed = testGameboard.placeShip(1, 1, 1);
+    expect(testShipFailed).toBe(false);
+  });
+
+  test("checks and returns false if ship is already placed at spanned coordinates", () => {
+    testGameboard.placeShip(1, 1, 3);
+    const testShipFailed = testGameboard.placeShip(1, 3, 1);
+    expect(testShipFailed).toBe(false);
+  });
+
+  test("checks and returns false if coordinates out of bounds", () => {
+    const testShipFailed = testGameboard.placeShip(99, 99, 1);
+    expect(testShipFailed).toBe(false);
+  });
 });
 
-test("Place ship creates ship at x, y and spans across length coordinates", () => {
-  const testGameboard = gameboard();
-  const testShip = testGameboard.placeShip(1, 1, 3);
-  expect(testGameboard.getBoard()[1][1]).toBe(testShip);
-  expect(testGameboard.getBoard()[1][2]).toBe(testShip);
-  expect(testGameboard.getBoard()[1][3]).toBe(testShip);
-});
+describe("Receive Attack", () => {
 
-test("Place ship with horizontal = true creates ship at x, y and spans across length coordinates horizontally", () => {
-  const testGameboard = gameboard();
-  const testShip = testGameboard.placeShip(1, 1, 3, true);
-  expect(testGameboard.getBoard()[1][1]).toBe(testShip);
-  expect(testGameboard.getBoard()[2][1]).toBe(testShip);
-  expect(testGameboard.getBoard()[3][1]).toBe(testShip);
-});
+  let testShip;
+  beforeEach(() => {
+    testShip = testGameboard.placeShip(1, 1, 3);
+    testShip.hit = jest.fn(() => "hit");
+  })
 
-test("Place ship checks and returns false if ship is already placed at coordinates", () => {
-  const testGameboard = gameboard();
-  testGameboard.placeShip(1, 1, 1);
-  const testShipFailed = testGameboard.placeShip(1, 1, 1);
-  expect(testShipFailed).toBe(false);
-});
+  test("sends hit function to ship at target coordinates", () => {
+    testGameboard.receiveAttack(1, 1);
+    expect(testShip.hit).toHaveBeenCalled();
+  });
 
-test("Place ship checks and returns false if ship is already placed at spanned coordinates", () => {
-  const testGameboard = gameboard();
-  testGameboard.placeShip(1, 1, 3);
-  const testShipFailed = testGameboard.placeShip(1, 3, 1);
-  expect(testShipFailed).toBe(false);
-});
+  test("does not send hit function when ship missed", () => {
+    testGameboard.receiveAttack(2, 2);
+    expect(testShip.hit).toHaveBeenCalledTimes(0);
+  });
 
-test("Place ship checks and returns false if coordinates out of bounds", () => {
-  const testGameboard = gameboard();
-  const testShipFailed = testGameboard.placeShip(99, 99, 1);
-  expect(testShipFailed).toBe(false);
+  test("records missed shot", () => {
+    testGameboard.receiveAttack(2, 2);
+    expect(testGameboard.getBoard()[2][2].missed).toEqual(true);
+  });
 });
