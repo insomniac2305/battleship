@@ -37,13 +37,19 @@ export default () => {
   };
 
   const receiveAttack = (col, row) => {
+    if (col < 0 || col > 9 || row < 0 || row > 9) {
+      return false;
+    }
+
     const attackedShip = board[col][row].ship;
     if (attackedShip) {
-      attackedShip.hit();
-    } else {
-      board[col][row].missed = true;
+      return attackedShip.hit();
     }
+    board[col][row].missed = true;
+    return true;
   };
 
-  return { getBoard, placeShip, receiveAttack };
+  const allShipsSunk = () => true;
+
+  return { getBoard, placeShip, receiveAttack, allShipsSunk };
 };

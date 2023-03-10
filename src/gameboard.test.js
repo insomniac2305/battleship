@@ -65,4 +65,20 @@ describe("Receive Attack", () => {
     testGameboard.receiveAttack(2, 2);
     expect(testGameboard.getBoard()[2][2].missed).toEqual(true);
   });
+
+  test("returns false if coordinates out of bounds", () => {
+    const attackResult = testGameboard.receiveAttack(99, 99);
+    expect(attackResult).toBe(false);
+  })
 });
+
+describe("All ships sunk", () => {
+
+  test("returns true if all ships sunk", () => {
+    testGameboard.placeShip(1, 1, 1);
+    testGameboard.receiveAttack(1, 1);
+    const allShipsSunk = testGameboard.allShipsSunk();
+    expect(allShipsSunk).toBe(true);
+  })
+
+})
