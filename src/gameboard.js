@@ -49,7 +49,10 @@ export default () => {
     return true;
   };
 
-  const allShipsSunk = () => true;
+  const allShipsSunk = () => {
+    const unsunkShips = board.flat().filter((field) => field.ship && !field.ship.isSunk());
+    return unsunkShips.length === 0;
+  };
 
   return { getBoard, placeShip, receiveAttack, allShipsSunk };
 };

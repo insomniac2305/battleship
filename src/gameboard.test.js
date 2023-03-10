@@ -44,12 +44,11 @@ describe("Place ship", () => {
 });
 
 describe("Receive Attack", () => {
-
   let testShip;
   beforeEach(() => {
     testShip = testGameboard.placeShip(1, 1, 3);
     testShip.hit = jest.fn(() => "hit");
-  })
+  });
 
   test("sends hit function to ship at target coordinates", () => {
     testGameboard.receiveAttack(1, 1);
@@ -69,16 +68,28 @@ describe("Receive Attack", () => {
   test("returns false if coordinates out of bounds", () => {
     const attackResult = testGameboard.receiveAttack(99, 99);
     expect(attackResult).toBe(false);
-  })
+  });
 });
 
 describe("All ships sunk", () => {
-
-  test("returns true if all ships sunk", () => {
+  test("returns true if single ship is sunk", () => {
     testGameboard.placeShip(1, 1, 1);
     testGameboard.receiveAttack(1, 1);
     const allShipsSunk = testGameboard.allShipsSunk();
     expect(allShipsSunk).toBe(true);
-  })
+  });
 
-})
+  test("returns false if single ship is not sunk", () => {
+    testGameboard.placeShip(1, 1, 1);
+    const allShipsSunk = testGameboard.allShipsSunk();
+    expect(allShipsSunk).toBe(false);
+  });
+
+  test("returns false if only some ships sunk", () => {
+    testGameboard.placeShip(1, 1, 1);
+    testGameboard.placeShip(3, 4, 3);
+    testGameboard.receiveAttack(1, 1);
+    const allShipsSunk = testGameboard.allShipsSunk();
+    expect(allShipsSunk).toBe(false);
+  });
+});
