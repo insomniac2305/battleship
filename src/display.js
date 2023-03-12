@@ -74,9 +74,19 @@ export default (() => {
   const invalidMove = () => {
     alert("Wrong move!");
   };
+  
+  const missedShot = () => {
+    alert("Miss! Switching Players ...");
+  }
+
+  const hitShot = () => {
+    alert("Enemy ship has been hit!");
+  }
+
   const gameOver = (winner) => {
     alert(`Winner is ${winner.name}`);
   };
+  
 
-  return { showBoards, invalidMove, gameOver };
+  return { showBoards, invalidMove, missedShot, hitShot, gameOver };
 })();
