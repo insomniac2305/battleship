@@ -45,10 +45,11 @@ export default () => {
     const attackedShip = board[col][row].ship;
     if (attackedShip) {
       board[col][row].hit = true;
-      return attackedShip.hit();
+      attackedShip.hit();
+      return "hit";
     }
     board[col][row].missed = true;
-    return true;
+    return "miss";
   };
 
   const allShipsSunk = () => {

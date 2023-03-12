@@ -13,7 +13,7 @@ export default () => {
   player1.board.placeShip(3, 5, 2, false);
   player1.board.placeShip(7, 2, 4, false);
   player1.board.placeShip(8, 8, 2, true);
-  
+
   player2.board.placeShip(3, 2, 3, true);
   player2.board.placeShip(5, 8, 2, true);
   player2.board.placeShip(6, 3, 4, false);
@@ -23,19 +23,29 @@ export default () => {
 
   const switchActivePlayer = () => {
     [activePlayer, inactivePlayer] = [inactivePlayer, activePlayer];
-    display.showBoards(activePlayer, inactivePlayer);
   };
 
   const takeTurn = (col, row) => {
-    if (!activePlayer.attack(inactivePlayer, col, row)) {
-      return display.invalidMove();
+    const attackResult = activePlayer.attack(inactivePlayer, col, row);
+    if (!attackResult) {
+      display.invalidMove();
     }
 
-    if (inactivePlayer.board.allShipsSunk()) {
-      return display.gameOver(activePlayer);
+    if (attackResult === "hit" && inactivePlayer.board.allShipsSunk()) {
+      display.gameOver(activePlayer);
     }
 
-    return switchActivePlayer();
+    if (attackResult === "miss") {
+      display.missedShot();
+      switchActivePlayer();
+    }
+
+    if (attackResult === "hit") {
+      display.hitShot();
+    }
+
+    display.showBoards(activePlayer, inactivePlayer);
+    return attackResult;
   };
 
   return { takeTurn };
