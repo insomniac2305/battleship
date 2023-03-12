@@ -9,15 +9,17 @@ export default () => {
   let activePlayer = player1;
   let inactivePlayer = player2;
 
-  player1.placeShip(1, 1, 3, true);
-  player1.placeShip(3, 5, 2, false);
-  player1.placeShip(7, 2, 4, false);
-  player1.placeShip(8, 8, 2, true);
+  player1.board.placeShip(1, 1, 3, true);
+  player1.board.placeShip(3, 5, 2, false);
+  player1.board.placeShip(7, 2, 4, false);
+  player1.board.placeShip(8, 8, 2, true);
+  
+  player2.board.placeShip(3, 2, 3, true);
+  player2.board.placeShip(5, 8, 2, true);
+  player2.board.placeShip(6, 3, 4, false);
+  player2.board.placeShip(8, 5, 2, true);
 
-  player2.placeShip(3, 2, 3, true);
-  player2.placeShip(5, 8, 2, true);
-  player2.placeShip(6, 3, 4, false);
-  player2.placeShip(8, 5, 2, true);
+  display.showBoards(activePlayer, inactivePlayer);
 
   const switchActivePlayer = () => {
     [activePlayer, inactivePlayer] = [inactivePlayer, activePlayer];
