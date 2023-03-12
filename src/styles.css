@@ -83,13 +83,13 @@ header {
 }
 
 .hit::after,
-.miss::after {
+.missed::after {
   content: "X";
   font-size: 24px;
   font-weight: bold;
 }
 
-.gameboard.inactive > .col > .row:not(.hit, .miss, .header):hover {
+.gameboard.inactive > .col > .row:not(.hit, .missed, .header):hover {
   cursor: pointer;
   background-color: #a7a7a7;
 }
