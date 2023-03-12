@@ -10,7 +10,7 @@
   "scripts": {
     "build-dev": "webpack --mode development",
     "build-prod": "webpack --mode production",
-    "start": "webpack serve --open",
+    "start": "webpack serve --open --mode development",
     "test": "jest",
     "test-watch": "jest --watch"
   },
