@@ -19,7 +19,22 @@ header {
 }
 
 .player-name {
-  text-align: center;
+  display: grid;
+  justify-items: center;
+}
+
+.player-name > h2 {
+  padding: 10px 20px 10px 20px;
+  transition: all ease 0.5s;
+}
+
+.player-name.active>h2 {
+  background-color: #abebbb;
+}
+
+.player-name.inactive>h2 {
+  background-color: #c2c2c2;
+  color: #4e4e4e;
 }
 
 .gameboard {
@@ -27,6 +42,8 @@ header {
   grid-template-columns: repeat(11, 50px);
   align-content: center;
   justify-content: center;
+  padding: 10px;
+  margin: 10px;
 }
 
 .col {
