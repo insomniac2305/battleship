@@ -8,6 +8,7 @@ export default () => {
     for (let row = 0; row < 10; row += 1) {
       board[col][row] = {
         ship: undefined,
+        hit: false,
         missed: false,
       };
     }
@@ -43,6 +44,7 @@ export default () => {
 
     const attackedShip = board[col][row].ship;
     if (attackedShip) {
+      board[col][row].hit = true;
       return attackedShip.hit();
     }
     board[col][row].missed = true;
