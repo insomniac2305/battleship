@@ -3,30 +3,23 @@ import gameboard from "./gameboard";
 import player from "./player";
 
 export default () => {
-  let player1;
-  let player2;
-  let activePlayer;
-  let inactivePlayer;
+  const player1 = player("Player One", gameboard());
+  const player2 = player("Player Two", gameboard());
 
-  const init = () => {
-    player1 = player("Player One", gameboard());
-    player2 = player("Player Two", gameboard());
+  let activePlayer = player1;
+  let inactivePlayer = player2;
 
-    player1.board.placeRandomShip(2);
-    player1.board.placeRandomShip(3);
-    player1.board.placeRandomShip(3);
-    player1.board.placeRandomShip(4);
+  player1.board.placeShip(1, 1, 3, true);
+  player1.board.placeShip(3, 5, 2, false);
+  player1.board.placeShip(7, 2, 4, false);
+  player1.board.placeShip(8, 8, 2, true);
 
-    player2.board.placeRandomShip(2);
-    player2.board.placeRandomShip(3);
-    player2.board.placeRandomShip(3);
-    player2.board.placeRandomShip(4);
+  player2.board.placeShip(3, 2, 3, true);
+  player2.board.placeShip(5, 8, 2, true);
+  player2.board.placeShip(6, 3, 4, false);
+  player2.board.placeShip(8, 5, 2, true);
 
-    activePlayer = player1;
-    inactivePlayer = player2;
-
-    display.showBoards(activePlayer, inactivePlayer);
-  };
+  display.showBoards(activePlayer, inactivePlayer);
 
   const switchActivePlayer = () => {
     [activePlayer, inactivePlayer] = [inactivePlayer, activePlayer];
@@ -40,7 +33,6 @@ export default () => {
 
     if (attackResult === "hit" && inactivePlayer.board.allShipsSunk()) {
       display.gameOver(activePlayer);
-      init();
     }
 
     if (attackResult === "miss") {
@@ -56,5 +48,5 @@ export default () => {
     return attackResult;
   };
 
-  return { init, takeTurn };
+  return { takeTurn };
 };

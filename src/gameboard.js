@@ -17,25 +17,17 @@ export default () => {
   const getBoard = () => board;
 
   const placeShip = (col, row, length, horizontal = false) => {
-    if (col < 0 || col > 9 || row < 0 || row > 9
-      || (horizontal && col + length > 9)
-      || (!horizontal && row + length > 9)) {
+    if (col < 0 || col > 9 || row < 0 || row > 9) {
       return false;
     }
 
     const newShip = ship(length);
 
     for (let i = 0; i < length; i += 1) {
-      let spanCol = horizontal ? i : 0;
-      let spanRow = horizontal ? 0 : i;
+      const spanCol = horizontal ? i : 0;
+      const spanRow = horizontal ? 0 : i;
 
-      if (board[col + spanCol][row + spanRow]?.ship !== undefined) {
-        // Rollback
-        for (let j = i - 1; j >= 0; j -= 1) {
-          spanCol = horizontal ? j : 0;
-          spanRow = horizontal ? 0 : j;
-          board[col + spanCol][row + spanRow].ship = undefined;
-        }
+      if (board[col + spanCol][row + spanRow].ship !== undefined) {
         return false;
       }
 
@@ -43,13 +35,6 @@ export default () => {
     }
 
     return newShip;
-  };
-
-  const placeRandomShip = (length) => {
-    const col = Math.floor(Math.random() * 10);
-    const row = Math.floor(Math.random() * 10);
-    const horizontal = Math.random() > 0.5;
-    placeShip(col, row, length, horizontal) || placeRandomShip(length);
   };
 
   const receiveAttack = (col, row) => {
@@ -72,5 +57,5 @@ export default () => {
     return unsunkShips.length === 0;
   };
 
-  return { getBoard, placeShip, placeRandomShip, receiveAttack, allShipsSunk };
+  return { getBoard, placeShip, receiveAttack, allShipsSunk };
 };

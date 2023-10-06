@@ -1,4 +1,3 @@
-/* eslint-disable no-alert */
 export default (() => {
   const fieldOne = document.querySelector(".field-one");
   const fieldTwo = document.querySelector(".field-two");
